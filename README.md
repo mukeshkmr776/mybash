@@ -1,0 +1,2 @@
+# mybash
+BASH using nodejs
