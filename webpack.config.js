@@ -6,5 +6,6 @@ module.exports = {
     filename: 'mycli.js',
     path: path.resolve(__dirname, 'dist')
   },
-  target: 'node'
+  target: 'node',
+  mode: 'production'
 }

@@ -21,8 +21,19 @@ let currentPath = __dirname
 // Interface initiate for readline
 let rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
+  prompt: getPromptLine(),
+  historySize: 5,
+  removeHistoryDuplicates: true
 })
+
+
+// Registering SIGNINT Listener
+process.on('SIGINT', () => {
+  console.log('SIGINT');
+  CommandService.EXIT();
+});
+
 
 // ===================================================================
 // Begins
@@ -32,14 +43,14 @@ let rl = readline.createInterface({
 CommandService.SHOW_INTRODUCTION()
 
 // Print default CLI line initially
-printDefaultLine()
+rl.prompt();
 
 // Handles input commands from consoles
 rl.on('line', (input) => {
   input = input.trim()
 
   // Extracting command and parameter
-  let values = input.split(' ')
+  let values = input.split(' ').filter(val => val)
   let [cmd, param] = values
 
   switch (cmd) {
@@ -74,10 +85,11 @@ rl.on('line', (input) => {
       break
   }
 
-  printDefaultLine()
+  rl.setPrompt(getPromptLine())
+
+  rl.prompt();
 })
 
-function printDefaultLine () {
-  console.log()
-  process.stdout.write(colors.green(`${uname}@${hostname}`) + `:` + colors.blue(`~${currentPath}]`) + `$ `)
+function getPromptLine() {
+  return colors.green(`${uname}@${hostname}`) + `:` + colors.blue(`~${currentPath}]`) + ` $ `;
 }
